@@ -1,38 +1,18 @@
-//Basic Game Application
-//Version 2
-// Basic Object, Image, Movement
-// Astronaut moves to the right.
-// Threaded
 
-//K. Chun 8/2018
-
-//*******************************************************************************
-//Import Section
-//Add Java libraries needed for the game
-//import java.awt.Canvas;
-
-//Graphics Libraries
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-
-//*******************************************************************************
-// Class Definition Section
-
 public class BasicGameApp implements Runnable {
 
-   //Variable Definition Section
-   //Declare the variables used in the program 
-   //You can set their initial values too
-   
-   //Sets the width and height of the program window
-	final int WIDTH = 1000;
+	public int randDX;
+	public int randDY;
+
+
+ 	final int WIDTH = 1000;
 	final int HEIGHT = 700;
 
-   //Declare the variables needed for the graphics
 	public JFrame frame;
 	public Canvas canvas;
    public JPanel panel;
@@ -40,51 +20,37 @@ public class BasicGameApp implements Runnable {
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
 
-   //Declare the objects used in the program
-   //These are things that are made up of more than one variable type
-	private Astronaut astro;
+	public Astronaut astro;
 
+	public Astronaut astro2;
 
-   // Main method definition
-   // This is the code that runs first and automatically
 	public static void main(String[] args) {
-		BasicGameApp ex = new BasicGameApp();   //creates a new instance of the game
-		new Thread(ex).start();                 //creates a threads & starts up the code in the run( ) method
+		BasicGameApp ex = new BasicGameApp();
+		new Thread(ex).start();
 	}
 
-
-   // Constructor Method
-   // This has the same name as the class
-   // This section is the setup portion of the program
-   // Initialize your variables and construct your program objects here.
 	public BasicGameApp() {
-      
+
       setUpGraphics();
-       
-      //variable and objects
-      //create (construct) the objects needed for the game and load up 
-		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
+
+
+		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png");
 		astro = new Astronaut(10,100);
+		astro2=new Astronaut(20,200);
 
+		randDX = ((int) (Math.random()*10) +1);
+		randDX = ((int) (Math.random()*10) +1);
+		astro2.dy = randDY;
+		astro2.dx=randDX;
+}
 
-	}// BasicGameApp()
-
-   
-//*******************************************************************************
-//User Method Section
-//
-// put your code to do things here.
-
-   // main thread
-   // this is the code that plays the game after you set things up
 	public void run() {
 
-      //for the moment we will loop things forever.
 		while (true) {
 
-         moveThings();  //move all the game objects
-         render();  // paint the graphics
-         pause(2); // sleep for 10 ms
+         moveThings();
+         render();
+         pause(2);
 		}
 	}
 
@@ -92,14 +58,13 @@ public class BasicGameApp implements Runnable {
 	public void moveThings()
 	{
 
-      //calls the move( ) code in the objects
 		astro.move();
-
+		astro2.move();
+		astro2.dx=2;
 	}
-	
-   //Pauses or sleeps the computer for the amount specified in milliseconds
+
    public void pause(int time ){
-   		//sleep
+
 			try {
 				Thread.sleep(time);
 			} catch (InterruptedException e) {
@@ -107,9 +72,9 @@ public class BasicGameApp implements Runnable {
 			}
    }
 
-   //Graphics setup method
+
    private void setUpGraphics() {
-      frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
+      frame = new JFrame("Application Template");
    
       panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
       panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
@@ -137,19 +102,14 @@ public class BasicGameApp implements Runnable {
    
    }
 
-
-	//paints things on the screen using bufferStrategy
 	private void render() {
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
-//start coding from here
 
-      //draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
+		g.drawImage(astroPic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
 
 
-
-		//ignore ts
 		g.dispose();
 		bufferStrategy.show();
 	}
